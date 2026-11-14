@@ -1,0 +1,28 @@
+#!/bin/sh
+# Git pre-commit hook to scan for secrets before committing
+
+if command -v uv >/dev/null 2>&1; then
+    uv run python scripts/check_secrets.py
+    EXIT_CODE=$?
+elif command -v python3 >/dev/null 2>&1; then
+    python3 scripts/check_secrets.py
+    EXIT_CODE=$?
+elif command -v python >/dev/null 2>&1; then
+    python scripts/check_secrets.py
+    EXIT_CODE=$?
+else
+    SECRET_REGEX='(GOCSPX-[A-Za-z0-9_-]{20,}|1//0[A-Za-z0-9_-]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9_-]{30,})'
+    if git diff --cached | grep -E -q "$SECRET_REGEX"; then
+        echo "========================================================================" >&2
+        echo "[BLOCKED] COMMIT ABORTED: Potential secret detected in staged changes!" >&2
+        echo "========================================================================" >&2
+        exit 1
+    fi
+    EXIT_CODE=0
+fi
+
+if [ $EXIT_CODE -ne 0 ]; then
+    exit $EXIT_CODE
+fi
+
+exit 0

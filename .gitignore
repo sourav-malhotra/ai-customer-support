@@ -7,12 +7,21 @@ wheels/
 *.egg-info
 
 # Virtual environments
-.venv
+.venv/
 
+# Environment files & Secrets
 .env
-credentials.json
+.env.*
+!.env.example
 credentials*.json
 client_secret*.json
 token*.json
+*secret*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependencies & Build artifacts
 node_modules/
 dashboard/dist/
