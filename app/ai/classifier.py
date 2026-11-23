@@ -4,7 +4,7 @@ from app.ai.schemas import Classification
 from app.config import settings
 
 INSTRUCTIONS = """
-You triage customer emails for Harbor & Pine, a home and outdoor store that sells on Amazon.
+You triage customer emails for Malhotra Co., a home and outdoor store that sells on Amazon.
 Read the email thread and classify the latest customer message.
 
 Sections:
